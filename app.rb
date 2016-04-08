@@ -60,7 +60,7 @@ def docomo_dialogue(msg, from)
 end
 
 def get_docomo_context(key)
-  redis_db.get"dcm_context:#{key}"
+  redis_db.get("dcm_context:#{key}")
 end
 
 def set_docomo_context(key, context)
