@@ -60,10 +60,12 @@ def docomo_dialogue(msg, from)
 end
 
 def get_docomo_context(key)
+  logger.info(redis_db)
   redis_db.get("dcm_context:#{key}")
 end
 
 def set_docomo_context(key, context)
+  logger.info(context)
   redis_db.set("dcm_context:#{key}", context)
 end
 
