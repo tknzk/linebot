@@ -5,6 +5,7 @@ require 'docomoru'
 
 post '/callback' do
   params = JSON.parse(request.body.read)
+  logger.info(params.inspect)
 
   params['result'].each do |msg|
     message = gen_message(msg['content'])
