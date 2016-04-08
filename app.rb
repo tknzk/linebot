@@ -50,7 +50,7 @@ def docomo_dialogue(msg, from)
     response = client.create_dialogue("#{msg}")
   else
     logger.info("context: #{get_docomo_context(from)}")
-    response = client.create_dialogue("#{msg}", {"context" => get_docomo_context(from)})
+    response = client.create_dialogue("#{msg}", {context: get_docomo_context(from)})
   end
   if response.status == 200
     body = response.body
