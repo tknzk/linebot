@@ -5,7 +5,7 @@ get '/hello' do
   puts 'world'
 end
 
-post '/linebot/callback' do
+post '/callback' do
   params = JSON.parse(request.body.read)
 
   params['result'].each do |msg|
