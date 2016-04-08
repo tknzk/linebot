@@ -5,10 +5,11 @@ require 'docomoru'
 
 post '/callback' do
   params = JSON.parse(request.body.read)
-  logger.info(params.inspect)
+  #logger.info(params.inspect)
 
   params['result'].each do |msg|
-    message = gen_message(msg['content'])
+    #message = gen_message(msg['content'])
+    message = docomo_dialogue(msg['content'])
 
     request_content = {
       to: [msg['content']['from']],
@@ -19,7 +20,7 @@ post '/callback' do
 
     endpoint_uri = 'https://trialbot-api.line.me/v1/events'
     content_json = request_content.to_json
-    logger.info(content_json)
+    #logger.info(content_json)
     RestClient.proxy = ENV["FIXIE_URL"]
     RestClient.post(endpoint_uri, content_json, {
       'Content-Type' => 'application/json; charset=UTF-8',
@@ -34,20 +35,26 @@ end
 
 private
 
-def gen_message(content)
-  return docomo_dialogue(content)
+def gen_message(msg)
+  return docomo_dialogue(msg)
 end
 
-def docomo_dialogue(content)
+def docomo_dialogue(msg)
   client = Docomoru::Client.new(api_key: ENV["DOCOMO_API_KEY"])
+  logger.info('======')
   logger.info(client.inspect)
-  logger.info(content)
-  #response = client.create_dialogue(content)
-  response = client.create_dialogue("こんにちは")
+  logger.info('======')
+  logger.info(msg)
+  logger.info('======')
+  response = client.create_dialogue(msg)
+  #response = client.create_dialogue("こんにちは")
+  logger.info('======')
   logger.info(response)
+  logger.info('======')
   if response.status == 200
     body = response.body
-    return body['utt']
+    logger.info(body)
+    return body["utt"]
   end
   content
 end
