@@ -1,5 +1,6 @@
 require 'json'
 require 'httpclient'
+require 'logger'
 
 get '/hello' do
   puts 'world'
