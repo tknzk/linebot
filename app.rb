@@ -46,7 +46,7 @@ def docomo_dialogue(msg)
   logger.info('======')
   logger.info(msg)
   logger.info('======')
-  response = client.create_dialogue(msg)
+  response = client.create_dialogue("#{msg}")
   #response = client.create_dialogue("こんにちは")
   logger.info('======')
   logger.info(response)
@@ -56,5 +56,5 @@ def docomo_dialogue(msg)
     logger.info(body)
     return body["utt"]
   end
-  msg
+  content
 end
