@@ -8,7 +8,7 @@ post '/callback' do
   params = JSON.parse(request.body.read)
 
   params['result'].each do |msg|
-    message = gen_message(msg['content'])
+    message = gen_message(msg['content'], msg['content']['from'])
 
     content = {
       "contentType" => 1,
