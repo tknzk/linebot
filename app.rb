@@ -1,7 +1,7 @@
 require 'json'
 require 'httpclient'
 
-get 'hello' do
+get '/hello' do
   puts 'world'
 end
 
