@@ -7,32 +7,14 @@ post '/callback' do
   params = JSON.parse(request.body.read)
 
   params['result'].each do |msg|
-    # docomo雑談API
-    docomoru = Docomoru::Client.new(api_key: ENV["DOCOMO_API_KEY"])
-    docomo_resp = docomoru.create_dialogue(msg['content'])
-    body = docomo_resp.body
+    message = gen_message(msg['content'])
 
-    logger.info(docomoru.inspect)
-    logger.info(docomo_resp.inspect)
-
-    if docomo_resp.status == 200
-      request_content = {
-        to: [msg['content']['from']],
-        toChannel: 1383378250, # Fixed  value
-        eventType: "138311608800106203", # Fixed value
-        content: body['utt']
-      }
-
-    else
-
-      # オウム返し
-      request_content = {
-        to: [msg['content']['from']],
-        toChannel: 1383378250, # Fixed  value
-        eventType: "138311608800106203", # Fixed value
-        content: msg['content']
-      }
-    end
+    request_content = {
+      to: [msg['content']['from']],
+      toChannel: 1383378250, # Fixed  value
+      eventType: "138311608800106203", # Fixed value
+      content: message
+    }
 
     endpoint_uri = 'https://trialbot-api.line.me/v1/events'
     content_json = request_content.to_json
@@ -47,4 +29,21 @@ post '/callback' do
   end
 
   "OK"
+end
+
+private
+
+def gen_message(content)
+  return docomo_dialogue(content)
+end
+
+def docomo_dialogue(content)
+  client = Docomoru::Client.new(api_key: ENV["DOCOMO_API_KEY"])
+  logger.debug(client.inspect)
+  response = client.create_dialogue(content)
+  if response.status == 200
+    body = response.body
+    return body['utt']
+  end
+  content
 end
