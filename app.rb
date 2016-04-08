@@ -40,8 +40,9 @@ end
 
 def docomo_dialogue(content)
   client = Docomoru::Client.new(api_key: ENV["DOCOMO_API_KEY"])
-  logger.debug(client.inspect)
+  logger.info(client.inspect)
   response = client.create_dialogue(content)
+  logger.info(response)
   if response.status == 200
     body = response.body
     return body['utt']
