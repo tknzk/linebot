@@ -41,6 +41,7 @@ end
 def docomo_dialogue(content)
   client = Docomoru::Client.new(api_key: ENV["DOCOMO_API_KEY"])
   logger.info(client.inspect)
+  logger.info(content)
   response = client.create_dialogue(content)
   logger.info(response)
   if response.status == 200
