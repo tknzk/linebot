@@ -2,6 +2,7 @@ require 'json'
 require 'logger'
 require 'rest-client'
 require 'docomoru'
+require 'redis'
 
 post '/callback' do
   params = JSON.parse(request.body.read)
@@ -38,17 +39,40 @@ end
 
 private
 
-def gen_message(msg)
-  return docomo_dialogue(msg)
+def gen_message(msg, from)
+  return docomo_dialogue(msg, from)
 end
 
-def docomo_dialogue(msg)
+def docomo_dialogue(msg, from)
   client = Docomoru::Client.new(api_key: ENV["DOCOMO_API_KEY"])
-  response = client.create_dialogue("#{msg}")
+  if get_docomo_context(from).nil?
+    response = client.create_dialogue("#{msg}")
+  else
+    response = client.create_dialogue("#{msg}", {"context" => get_docomo_context(from)})
+  end
   if response.status == 200
     body = response.body
-    logger.info(body)
+    set_docomo_context(from, body["context"])
+    #logger.info(body)
     return "#{body["utt"]}"
   end
   msg
+end
+
+def get_docomo_context(key)
+  redis_db.get"dcm_context:#{key}"
+end
+
+def set_docomo_context(key, context)
+  redis_db.set("dcm_context:#{key}", context)
+end
+
+def redis_db
+  if ENV['REDIS_URL'] != nil
+    uri   = URI.parse ENV['REDIS_URL']
+    redis = Redis.new:host => uri.host, :port => uri.port, :password => uri.password
+  else
+    redis = Redis.new host:"127.0.0.1", port:"6379"
+  end
+  redis
 end
