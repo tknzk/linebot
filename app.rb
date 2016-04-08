@@ -11,11 +11,13 @@ post '/callback' do
     #message = gen_message(msg['content'])
     message = docomo_dialogue(msg['content'])
 
+    logger.info(message)
+
     request_content = {
       to: [msg['content']['from']],
       toChannel: 1383378250, # Fixed  value
       eventType: "138311608800106203", # Fixed value
-      content: message
+      content: "#{message}"
     }
 
     endpoint_uri = 'https://trialbot-api.line.me/v1/events'
