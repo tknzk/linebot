@@ -17,7 +17,8 @@ post '/callback' do
       to: [msg['content']['from']],
       toChannel: 1383378250, # Fixed  value
       eventType: "138311608800106203", # Fixed value
-      content: message
+      #content: message
+      content: msg['content']
     }
 
     logger.info(request_content)
