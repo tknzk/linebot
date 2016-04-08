@@ -9,10 +9,11 @@ post '/callback' do
   params = JSON.parse(request.body.read)
 
   params['result'].each do |msg|
+    logger.debug(msg.inspect)
     request_content = {
       to: [msg['content']['from']],
-      toChannel: 1461526144, # Fixed  value
-      eventType: "138311609000106303", # Fixed value
+      toChannel: 1383378250, # Fixed  value
+      eventType: "138311608800106203", # Fixed value
       content: msg['content']
     }
 
