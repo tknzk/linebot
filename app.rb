@@ -56,5 +56,5 @@ def docomo_dialogue(msg)
     logger.info(body)
     return body["utt"]
   end
-  content
+  msg
 end
