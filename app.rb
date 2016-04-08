@@ -17,8 +17,10 @@ post '/callback' do
       to: [msg['content']['from']],
       toChannel: 1383378250, # Fixed  value
       eventType: "138311608800106203", # Fixed value
-      content: "#{message}"
+      content: message
     }
+
+    logger.info(request_content)
 
     endpoint_uri = 'https://trialbot-api.line.me/v1/events'
     content_json = request_content.to_json
