@@ -1,21 +1,35 @@
 require 'json'
 require 'logger'
 require 'rest-client'
-
-get '/hello' do
-  puts 'world'
-end
+require 'docomoru'
 
 post '/callback' do
   params = JSON.parse(request.body.read)
 
   params['result'].each do |msg|
-    request_content = {
-      to: [msg['content']['from']],
-      toChannel: 1383378250, # Fixed  value
-      eventType: "138311608800106203", # Fixed value
-      content: msg['content']
-    }
+    # docomo雑談API
+    docomoru = Docomoru::Client.new(api_key: ENV["DOCOMO_API_KEY"])
+    docomo_resp = docomoru.create_dialogue(msg['content'])
+    body = docomo_resp.body
+
+    if docomo_resp.status == 200
+      request_content = {
+        to: [msg['content']['from']],
+        toChannel: 1383378250, # Fixed  value
+        eventType: "138311608800106203", # Fixed value
+        content: body['utt']
+      }
+
+    else
+
+      # オウム返し
+      request_content = {
+        to: [msg['content']['from']],
+        toChannel: 1383378250, # Fixed  value
+        eventType: "138311608800106203", # Fixed value
+        content: msg['content']
+      }
+    end
 
     endpoint_uri = 'https://trialbot-api.line.me/v1/events'
     content_json = request_content.to_json
