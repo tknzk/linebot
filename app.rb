@@ -12,7 +12,7 @@ post '/callback' do
     docomo_resp = docomoru.create_dialogue(msg['content'])
     body = docomo_resp.body
 
-    logger.debug(docomo_resp.inspect)
+    logger.info(docomo_resp.inspect)
 
     if docomo_resp.status == 200
       request_content = {
