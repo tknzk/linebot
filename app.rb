@@ -46,8 +46,10 @@ end
 def docomo_dialogue(msg, from)
   client = Docomoru::Client.new(api_key: ENV["DOCOMO_API_KEY"])
   if get_docomo_context(from).nil?
+    logger.info("no-context request")
     response = client.create_dialogue("#{msg}")
   else
+    logger.info("context: #{get_docomo_context(from)}")
     response = client.create_dialogue("#{msg}", {"context" => get_docomo_context(from)})
   end
   if response.status == 200
@@ -60,12 +62,10 @@ def docomo_dialogue(msg, from)
 end
 
 def get_docomo_context(key)
-  logger.info(redis_db)
   redis_db.get("dcm_context:#{key}")
 end
 
 def set_docomo_context(key, context)
-  logger.info(context)
   redis_db.set("dcm_context:#{key}", context)
 end
 
