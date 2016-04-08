@@ -11,6 +11,12 @@ post '/callback' do
     #message = gen_message(msg['content'])
     message = docomo_dialogue(msg['content'])
 
+    content = {
+      "contentType" => 1,
+      "toType" => 1,
+      "text" => message
+    }
+
     logger.info(message)
 
     request_content = {
@@ -18,7 +24,7 @@ post '/callback' do
       toChannel: 1383378250, # Fixed  value
       eventType: "138311608800106203", # Fixed value
       #content: message
-      content: msg['content']
+      content: content
     }
 
     logger.info(request_content)
