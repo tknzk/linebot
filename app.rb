@@ -33,6 +33,7 @@ post '/callback' do
       'X-Line-Trusted-User-With-ACL' => ENV["LINE_CHANNEL_MID"],
     })
   end
+  Redis.current.disconnect!
 
   "OK"
 end
