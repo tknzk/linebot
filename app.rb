@@ -18,8 +18,8 @@ post '/callback' do
 
     request_content = {
       to: [msg['content']['from']],
-      toChannel: 1383378250, # Fixed  value
-      eventType: "138311608800106203", # Fixed value
+      toChannel: 1383378250,
+      eventType: "138311608800106203",
       content: content
     }
 
@@ -55,7 +55,6 @@ def docomo_dialogue(msg, from)
   if response.status == 200
     body = response.body
     set_docomo_context(from, body["context"])
-    #logger.info(body)
     return "#{body["utt"]}"
   end
   msg
