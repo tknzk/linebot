@@ -2,17 +2,17 @@
 
 Simple LINE BOT x Docomo Dialouge API integration app on Heroku
 
-# requirement gems
+# Gems
 - sinatra
 - docomoru
 - rest-clicent
 - redis
 
-# requirement heroku addons
+# heroku addons
 - fixie:tricycle
 - heroku-redis:hobby-dev
 
-# requirement API token
+# API token
 - LINE BOT API
   - https://developers.line.me/
 - Docomo dialogue API
